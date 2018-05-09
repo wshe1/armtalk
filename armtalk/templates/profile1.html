@@ -56,13 +56,13 @@
             </div>
             {% if has_next %}
             <div class="more-content js-load-more">
-                <a class="_oidfu"  href="javascript:void(0);">更多</a>
+                <a class="_oidfu" href="javascript:void(0);">更多</a>
             </div>
             {% endif %}
         </div>
     </article>
 </div>
-{% endblock%}<!-- 所有使用的模块必须在base.html中加载-->
+{% endblock%}
 {% block js %}
 <script type="text/javascript">
     window.uid = {{user.id}};

@@ -1,6 +1,7 @@
 #-*-encoding=UTF-8 -*-
-from armtalk import db
+from armtalk import db,login_manager
 import random
+
 from datetime import datetime
 class Comment(db.Model):
     id=db.Column(db.Integer,primary_key=True,autoincrement=True)
@@ -38,12 +39,32 @@ class User(db.Model):
     id=db.Column(db.Integer,primary_key=True,autoincrement=True)#定义id的属性，整形，逐主键，自动递增
     username=db.Column(db.String(80),unique=True)
     password=db.Column(db.String(32))
+    salt=db.Column(db.String(32))#盐用于加密
     head_url=db.Column(db.String(256))
     images=db.relationship('Image',backref='user',lazy='dynamic')#互相关联，一个人有多个图片
 
-    def __init__(self,uname,passwd):#构造函数
+    def __init__(self,uname,passwd,salt=''):#构造函数
         self.username=uname
         self.password=passwd
+        self.salt=salt
         self.head_url='https://gss2.bdstatic.com/-fo3dSag_xI4khGkpoWK1HF6hhy/baike/s%3D220/sign=ffd0c2b2bd0e7bec27da04e31f2fb9fa/810a19d8bc3eb135f52b6106a31ea8d3fc1f449b.jpg'
     def __repr__(self):#显示
         return '<User %d %s>' %(self.id,self.username)
+    #使用flask-login 用户类需要实现的方法
+    def is_authenticated(self):
+        return True
+
+    def is_active(self):
+        return True
+    def is_anonymous(self):
+        return False
+    def get_id(self):
+        return self.id
+
+
+
+
+
+@login_manager.user_loader
+def load_user(user_id):
+    return User.query.get(user_id)#查询用户

@@ -15,7 +15,7 @@ def init_databas():#定义自己的相关的命令。,装饰器，能在命令�
     db.create_all()#根据models胡数据表在数据库中创建表
     for i in range(1,20):
         db.session.add(User('user'+str(i),'123456'))#添加数据
-        for j in range(0,2):
+        for j in range(0,10):
             db.session.add(Image('http://www.haijun360.com/china/117/images/1x.jpg',i))
             for k in range(0,3):#数据库的id必须在从1开始。
                 db.session.add(Comment('abcdef',i*2+j-1,i))
